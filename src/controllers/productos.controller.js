@@ -40,8 +40,12 @@ export const postProducto = async (req,res,next) =>{
 
 export const putProducto = async (req,res) =>{
     try{
-        const [rows] = await pool.query('SELECT * FROM  productos')
-        res.send(rows)
+        const {name,cantidad,precio} = req.body
+        const [rows] = await pool.query('UPDATE productos SET name = ?,cantidad = ?,precio = ? WHERE id = ?',[name,cantidad,precio])
+        if (rows.affectedRows === 0){
+            console.log('no se encontro el producto')
+        }
+        res.send(`producto actualizado nombre: ${name},${precio},${cantidad}`)
     }
     catch(error){
         res.status(500).json({msg:'parece que no se encontro en la BD o algo salio mal nose !!!'})
@@ -49,8 +53,12 @@ export const putProducto = async (req,res) =>{
 }
 export const patchProducto = async (req,res) =>{
     try{
-        const [rows] = await pool.query('SELECT * FROM  productos')
-        res.send(rows)
+        const {name,precio} = req.body
+        const [rows] = await pool.query('UPDATE productos SET precio = ? WHERE name = ?',[precio,name])
+        if (rows.affectedRows === 0){
+            console.log('no se encontro el producto')
+        }
+        res.send(`producto actualizado nombre: ${name},${precio}`)
     }
     catch(error){
         res.status(500).json({msg:'parece que no se encontro en la BD o algo salio mal nose !!!'})
@@ -59,8 +67,12 @@ export const patchProducto = async (req,res) =>{
 
 export const deleteProducto = async (req,res) =>{
     try{
-        const [rows] = await pool.query('SELECT * FROM  productos')
-        res.send(rows)
+        const [rows] = await pool.query('DELETE FROM productos Where id = ?',[parseInt(req.body.id)])
+        if(rows.affectedRows === 0){
+            console.log('no se encontro el producto o ya esta eliminado jeje')
+        }
+        res.send('producto eliminado')
+        console.log(rows)
     }
     catch(error){
         res.status(500).json({msg:'parece que no se encontro en la BD o algo salio mal nose !!!'})

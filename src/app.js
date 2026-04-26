@@ -8,6 +8,7 @@ import pruebadb from './routes/ping.js'
 const app = express()
 
 //middlewares
+app.use(cors())
 app.use(morgan('dev'))
 app.use(express.json())
 
