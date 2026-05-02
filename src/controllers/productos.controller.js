@@ -11,11 +11,14 @@ export const getProductos = async (req,res) =>{
 
 export const getProducto = async (req,res) =>{
     try{
-        const [rows] = await pool.query('SELECT * FROM  productos where id = ?',[parseInt(req.params.id)])
+        const [rows] = await pool.query('SELECT * FROM  productos where name = ?',[req.params.name])
+        if(rows.length === 0){
+            console.log(`no se encontro el producto: ${req.params.name}`)
+        }
         res.send(rows)
     }
     catch(error){
-        res.status(500).json({msg:'parece que no se encontro en la BD o algo salio mal nose !!!'})
+        res.status(404).json({msg:'parece que no se encontro en la BD o algo salio mal nose !!!'})
     }
 }
 

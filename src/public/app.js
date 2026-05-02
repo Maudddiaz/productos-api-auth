@@ -4,10 +4,13 @@ const API_URL = 'http://localhost:3000/api';
 const productForm = document.getElementById('product-form');
 const productList = document.getElementById('product-list');
 const btnReload = document.getElementById('btn-reload');
+const btnSearch = document.getElementById('btn-search');
+const searchName = document.getElementById('search-name');
 
 // Event Listeners
 productForm.addEventListener('submit', createProduct);
 btnReload.addEventListener('click', loadProducts);
+btnSearch.addEventListener('click', searchProduct);
 
 // Función para cargar productos (GET)
 async function loadProducts() {
@@ -67,6 +70,39 @@ async function deleteProduct(id) {
         body: JSON.stringify({ id })
     });
     loadProducts();
+}
+
+// Función para buscar un producto por nombre (GET)
+async function searchProduct() {
+    const name = searchName.value.trim();
+    
+    if (!name) {
+        return loadProducts(); // Si el campo está vacío, recarga toda la lista
+    }
+
+    try {
+        const response = await fetch(`${API_URL}/producto/${name}`);
+        
+        if (response.status === 404) {
+            productList.innerHTML = `<li><div class="product-info"><strong>No se encontró el producto: ${name}</strong></div></li>`;
+            return;
+        }
+        
+        const product = await response.json();
+        productList.innerHTML = ''; // Limpiar la lista actual
+        
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <div class="product-info">
+                <strong>${product.name}</strong> 
+                <span>(Cant: ${product.cantidad}) - $${product.precio}</span>
+            </div>
+            <button class="btn-danger" onclick="deleteProduct(${product.id})">Eliminar</button>
+        `;
+        productList.appendChild(li);
+    } catch (error) {
+        console.error('Error buscando el producto:', error);
+    }
 }
 
 // Cargar lista de productos al iniciar la página

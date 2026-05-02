@@ -4,7 +4,7 @@ const router = Router();
 //get obtener productos
 router.get('/productos',getProductos)
 
-router.get('/producto/:id',getProducto)
+router.get('/producto/:name',getProducto)
 
 //post poner nuevo producto
 router.post('/producto',postProducto)

@@ -28,7 +28,12 @@
 
         <section class="card">
             <h2>Lista de Productos</h2>
-            <button id="btn-reload" class="btn-secondary">Recargar Lista</button>
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <input type="text" id="search-name" placeholder="Buscar por nombre...">
+                <button id="btn-search" class="btn-primary">Buscar</button>
+                <button id="btn-reload" class="btn-secondary">Mostrar Todos</button>
+            </div>
+            
             <ul id="product-list"></ul>
         </section>
     </main>
